@@ -1,0 +1,42 @@
+<h1 id="cs-180-project-1">CS 180: Project 1</h1>
+<p>The purpose of this project is to take black and white images where each color channel is a separate image, and combine the channels to properly align them.</p>
+<p><img src="./plots/overview.png" alt="Overview" /></p>
+<h2 id="base-approach">Base Approach:</h2>
+<p>To start, we took the following approach (which you can find in <code>misc/base_approach.py</code>):</p>
+<ol type="1">
+<li>Split image into three equal height chunks on the vertical axis. These become blue, green, and red channels respectively.</li>
+<li>For a range of vertical and horizontal shifts, compute normalized cross correlations between channel pairs.</li>
+<li>Apply offsets to red and green channels such that normalized cross correlation with blue channel is maximized.</li>
+<li>Save and plot resulting 3 channel image.</li>
+</ol>
+<p>Plotting the normalized cross correlation performance metric, we can see that there is a peak at the “optimal” offset:</p>
+<p><img src="./plots/cc_plot_cathedral.png" alt="cc plot cathedral" /></p>
+<p>And this is the result produced:</p>
+<p><img src="./plots/cathedral_base.jpg" alt="cathedral aligned basic" /></p>
+<hr />
+<h2 id="issues">Issues:</h2>
+<ul>
+<li>Slow runtimes on large images.</li>
+<li>Bad reliability on images with larger differences between channels.</li>
+</ul>
+<hr />
+<h2 id="optimizations">Optimizations:</h2>
+<h3 id="pyramid-search">Pyramid Search:</h3>
+<p>To address the performance issues, we implement pyramid search as follows:</p>
+<ol type="1">
+<li>Compute ideal offset over large range on scaled down image and apply to full size image.</li>
+<li>Double image size.</li>
+<li>Compute new ideal offset over small range.</li>
+<li>Repeat 2 and 3 until image is full size.</li>
+</ol>
+<p>The first pass is fast because the image is small, and all subsequent alignments only need to check a small range of offsets because one can assume the images are already roughly aligned. This therefore balances the tradeoff between accuracy and speed where using small images produces worse accuracy but better speed, and large images produce better accuracy for worse speeds.</p>
+<p>For <code>sculpture.tif</code>, we get the following steps for alignment:</p>
+<p>PLOT IMAGE HERE <img src="./plots/pyramid.png" alt="Pyramid Steps" /></p>
+<p>This also lets us improve run time from &gt;10 minutes to 6.916s on <code>sculpture.tif</code></p>
+<h3 id="canny-edge-detection">Canny edge detection:</h3>
+<p>To improve reliability of alignment, we apply Canny edge detection to each of the channels using opencv prior to aligning the images. Canny edge detection finds edges in an image finding intensity gradients that fall within a given range and filtering the results to only include well connected edges.</p>
+<p>Applying canny edge detection is beneficial for reliable alignment for two main reasons. The first of which is that because only the edges are considered for alignment, actual intensity within those edges are not considered. This is especially beneficial in noisy scenes and when there is greater deviation between color channels. The second benefit of applying an edge detector is that it produces a sharper peak for optimal alignment.</p>
+<p>For <code>cathedral.jpg</code>, you can see the peak becomes sharper when canny edge detection is applied.</p>
+<p><img src="./plots/canny_effect_cc_plot.png" alt="cathedral canny cc effects" /></p>
+<p>You can also see a noticeable improvement in quality of results on <code>harvesters.tif</code>.</p>
+<p><img src="./plots/canny_effect_qual.png" alt="qualatative impact of canny on alignment of harvesters.tif" /></p>
