@@ -31,7 +31,7 @@
 </ol>
 <p>The first pass is fast because the image is small, and all subsequent alignments only need to check a small range of offsets because one can assume the images are already roughly aligned. This therefore balances the tradeoff between accuracy and speed where using small images produces worse accuracy but better speed, and large images produce better accuracy for worse speeds.</p>
 <p>For <code>sculpture.tif</code>, we get the following steps for alignment:</p>
-<p>PLOT IMAGE HERE <img src="./plots/pyramid.png" alt="Pyramid Steps" /></p>
+<p><img src="./plots/pyramid.png" alt="Pyramid Steps" /></p>
 <p>This also lets us improve run time from &gt;10 minutes to 6.916s on <code>sculpture.tif</code></p>
 <h3 id="canny-edge-detection">Canny edge detection:</h3>
 <p>To improve reliability of alignment, we apply Canny edge detection to each of the channels using opencv prior to aligning the images. Canny edge detection finds edges in an image finding intensity gradients that fall within a given range and filtering the results to only include well connected edges.</p>

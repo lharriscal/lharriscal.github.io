@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Project 2</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Project 2</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cs-180-project-2-fun-with-filters-and-frequencies">CS 180 Project 2: Fun with Filters and Frequencies!</a>
+<ul>
+<li><a href="#part-1-fun-with-filters">Part 1: Fun with Filters</a>
+<ul>
+<li><a href="#finite-difference-operator">1.1: Finite Difference Operator</a></li>
+<li><a href="#derivative-of-gaussian-dog-filter">1.2 Derivative of Gaussian (DOG) Filter</a></li>
+</ul></li>
+<li><a href="#part-2-fun-with-frequencies">Part 2: Fun with Frequencies</a>
+<ul>
+<li><a href="#image-sharpening">2.1: Image Sharpening</a></li>
+<li><a href="#hybrid-images">2.2: Hybrid Images</a></li>
+<li><a href="#gaussian-and-laplacian-stacks">2.3 Gaussian and Laplacian Stacks</a></li>
+<li><a href="#multiresolution-blending">2.4 Multiresolution Blending</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="cs-180-project-2-fun-with-filters-and-frequencies">CS 180 Project 2: Fun with Filters and Frequencies!</h1>
+<h2 id="part-1-fun-with-filters">Part 1: Fun with Filters</h2>
+<h3 id="finite-difference-operator">1.1: Finite Difference Operator</h3>
+<p>The finite difference operator represents taking the partial derivative of the image in the x and y direction. To find these partial derivatives, we convolve <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5B-1%2C%201%5D" alt="[-1, 1]" title="[-1, 1]" /> and its transpose with our image. As the difference in the value of two neighboring pixels increases, the magnitude of such partial derivatives increase as well. We take the magnitude of the computed gradient by taking the euclidean norm of the partial derivates in a length 2 vector at each pixel. Plotting yield the following image:</p>
+<p><img src="./plots/FDO_grad_apply.png" alt="Applying the Gradient" /></p>
+<p>We can then extract edges from this image by thresholding the gradients. The underlying principle here is that when the gradients are large, there is usually an edge. We find a threshold that isolates the edges from the noise and the rest of the image experimentally to be the maximum of the gradient divided by 2.3.</p>
+<p><img src="./plots/FDO_grad_to_edge.png" alt="Isolating Edges" /></p>
+<h3 id="derivative-of-gaussian-dog-filter">1.2 Derivative of Gaussian (DOG) Filter</h3>
+<p>However, when directly applying the finite difference operator to find edges, we run into the issue that noise, not just edges, results in high values for the gradient. It is therefore difficult to find a threshold where we filter out all noise without also dropping some of the edges. To solve this we can first apply a gaussian filter (with a 3px standard deviation) through convolution. As before, we can apply thresholding to isolate the edges. I used the same threshold as before (maximum gradient divided by 2.3).</p>
+<p><img src="./plots/DOG_compare.png" alt="DOG compared to FDO" /></p>
+<p>We can accomplish the same thing with one convolution over the input image by instead using the same gaussian convolved with our finite difference filters as our DOG filter. This yields the same result. We verify by subtracting the result we produced with two steps and checking the maximum pixel value is equal to 0.</p>
+<p><img src="./plots/DOG_as_one_op.png" alt="DOG as One Operation" /></p>
+<hr />
+<h2 id="part-2-fun-with-frequencies">Part 2: Fun with Frequencies</h2>
+<h3 id="image-sharpening">2.1: Image Sharpening</h3>
+<p>When an image has more high frequency components, we perceive it as sharper. We can thus increase the perceived “sharpness” of an image by amplifying its high frequency components. To accomplish this we can blur an image by applying a gaussian filter. We then subtract this blurred version from the original image to isolate the high frequencies. We can then add these high frequencies to the original image to sharpen this. We can equivalently accomplish this with a single convolution by applying an unsharp mask filter. This filter is sum of th dirac delta function and a multiple of the difference between the dirac delta function and a gaussian.</p>
+<p><br /><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%0Au%3D%281%2B%5Calpha%29e%20-%20%5Calpha%20g%0A" alt="
+u=(1+\alpha)e - \alpha g
+" title="
+u=(1+\alpha)e - \alpha g
+" /><br /></p>
+<p>u is the unsharp mask filter, e is the dirac delta function, g is a gaussian, and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha" alt="\alpha" title="\alpha" /> is a parameter controlling quantity of sharpness.</p>
+<p>We apply this filter to the following images (<img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Csigma" alt="\sigma" title="\sigma" /> is the standard deviation of the gaussian kernel used). Parameters used derived qualitatively based on what I personally believed looked best while still demonstrating added sharpness.</p>
+<p><img src="./plots/sharpen_taj.png" alt="Sharpen Taj" /> <img src="./plots/sharpen_monastery.png" alt="Sharpen Monastery" /> <img src="./plots/sharpen_urchin.png" alt="Sharpen Urchin" /></p>
+<p>Mathematically, we can see that increasing <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha" alt="\alpha" title="\alpha" /> should create higher magnitude high frequency components and thus increase perceived sharpness. We can observe this impact qualitatively by plotting images with a sweep of values for <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha" alt="\alpha" title="\alpha" />.</p>
+<p><img src="./plots/sharpen_progression.png" alt="alpha sweep" /></p>
+<p>Finally, we can observe the limits of sharpening, by taking an image, blurring it, and then applying sharpening.</p>
+<p><img src="./plots/sharpen_recovery.png" alt="recovery?" /></p>
+<p>As you can see, while contrast of the resulting image is boosted, the final image is still blurred. This is because, while our sharpening algorithm amplifies high frequencies in an image, it cannot actually recovery any information that we lost by applying the low pass filter.</p>
+<h3 id="hybrid-images">2.2: Hybrid Images</h3>
+<p>By playing with frequencies, we can create hybrid images that appear as one image from close up and a different image from far away. The underlying principle here is that from far away, you will mostly see the low frequency components of an image, but from close up you will mostly see the high frequency components of an image.</p>
+<p>We can therefore combine images as so:</p>
+<ol type="1">
+<li>Align images.</li>
+<li>Apply a low-pass filter to the first image.</li>
+<li>Apply a high-pass filter to the second image.</li>
+<li>Sum the images.</li>
+</ol>
+<p>We apply this algorithm to some images:</p>
+<p><img src="./plots/derek_nutmeg_hybrid.png" alt="Default Images" /> <img src="./plots/dog_puppy_hybrid.png" alt="Dog and Puppy" /> <img src="./plots/kelp_urchin_hybrid.png" alt="Failure" /></p>
+<p>We can see that while the first two examples work quite well, the last example is hard to see the low and high frequency components. This is likely due to the choice in source images. Everything recognizable in the image of the sea urchin falls into high frequency, so it is hard to make it visible when displayed in the low frequencies.</p>
+<p>To better understand what is happening when we make these hybrid images, We plot the FFT at each step to see how the filters affect expression of given frequencies.</p>
+<p><img src="./plots/hybrid_img_freq_analysis.png" alt="Frequency Analysis" /></p>
+<p>As you can see, in the original image the whole range of frequencies are expressed and in both images we see a large peak near 0. The low pass filter successfully isolates the low frequencies only, and the high pass filter greatly attenuates frequencies near 0. While the plot of the FFT of the high-passed image still looks gray at (0,0), the plot is on a log scale and the brightness at 0 is more than 5 orders of magnitude less than the original image, demonstrating that low frequencies are effectively attenuated. In the FFT of the final image, there is a new spot of higher magnitude near (0,0) from adding int the low frequencies from the other image.</p>
+<h3 id="gaussian-and-laplacian-stacks">2.3 Gaussian and Laplacian Stacks</h3>
+<p>A Gaussian stack is a series of images that we can derive from a source image where each subsequent image comes from applying a gaussian filter to the previous image. The first image is just the original. In this way we can form a stack where each subsequent image progressively bypasses a smaller range of low frequencies. In other terms, each image is more blurry than the last.</p>
+<p>A Laplacian stack is similar in construction but each layer represents a range of frequencies. In other words, each layer represents a band pass filter of progressively smaller frequencies. We can construct such a Laplacian stack by subtracting the next layer from each layer in a Gaussian stack. The last layer is just the same as in the Gaussian stack since there is no next layer to subtract. By retaining this last layer, it is possible for us to recover the original image by taking the pixelwise sum of the entire stack. This allows us to do things like merge different frequency bands from multiple images with different masks and recombine each of the combined frequency bands into one image.</p>
+<p>We construct such a stack on the images of an orange and and apple:</p>
+<p><img src="./plots/laplacian_stack_example.png" alt="Laplacian Stack" /></p>
+<p>The first 3 rows represent layers 0, 2, and 4 of the Laplacian stack which represent high, medium, and low frequency components. The leftmost column are the masked Laplacian stack layers for the apple, the middle column has the masked stack layers for the orange, and the rightmost column has the combined stack layers. The mask at each layer comes from taking the gaussian stack of a predefined mask. That way the mask is blurred further and blends more gradually for lower frequency components of the images we are combining. The bottom row of this plot contains the sum of each Laplacian stack. By summing the stack we can recover the original image, or, in the case of the last column, recover a blended result where the mask is more gradual for lower frequencies.</p>
+<h3 id="multiresolution-blending">2.4 Multiresolution Blending</h3>
+<p>Using the ideas of the Laplacian and Gaussian stack that we previously described, we can apply combine two images smoothly and with an arbitrary mask. We do so as follows:</p>
+<ol type="1">
+<li>Compute Laplacian stack of each image</li>
+<li>Compute Gaussian stack of the high frequency mask (ie the input mask)</li>
+<li>Use the gaussian stack of masks to compute a pixelwise weighted average of the two images at each level of the Laplacian stack.</li>
+<li>Take a pixelwise summation of the resulting stack to recover the blended image.</li>
+</ol>
+<p>By taking such a weighted average with a different mask at each level of the Laplacian stacks, we can create frequency dependent masking behaviour. Since we mask each layer of the Laplacian stacks using each layer of of a Gaussian stack of masks, we apply a more gradual blending at lower frequencies and a sharper blending at higher frequencies. This works because, to have a sharp final image, we need the high frequency details to be preserved. However, we dont need such sharp blending for the lower frequencies, and, in fact, applying a more gradual blending looks more natural. This method therefore successfully creates a natural and smooth blending while retaining high frequency details.</p>
+<p>As in the Burt and Adelson paper we demonstrate mutliresolution blending by merging images of an apple and of an orange:</p>
+<p><img src="./plots/orapple_demo.png" alt="orapple" /></p>
+<p>We can similarly merge two images of latte art.</p>
+<p><img src="./plots/coffee_blend_demo.png" alt="coffee mix" /></p>
+<p>This same process works with irregular masks as well:</p>
+<p><img src="./plots/puppy_eyes_demo.png" alt="puppy dog irregular mask" /></p>
+<p>We can the process of merging images occurs by visualizing the layers in the Laplacian stacks and their corresponding masks. This plot has the same layout as the plot described in part 2.3.</p>
+<p><img src="./plots/coffee_progression.png" alt="progression" /></p>
+</body>
+</html>
+<style>img { max-width: 90%; height: auto; } }</style>
