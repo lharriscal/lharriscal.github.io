@@ -47,6 +47,7 @@
 <h3 id="derivative-of-gaussian-dog-filter">1.2 Derivative of Gaussian (DOG) Filter</h3>
 <p>However, when directly applying the finite difference operator to find edges, we run into the issue that noise, not just edges, results in high values for the gradient. It is therefore difficult to find a threshold where we filter out all noise without also dropping some of the edges. To solve this we can first apply a gaussian filter (with a 3px standard deviation) through convolution. As before, we can apply thresholding to isolate the edges. I used the same threshold as before (maximum gradient divided by 2.3).</p>
 <p><img src="./plots/DOG_compare.png" alt="DOG compared to FDO" /></p>
+<p>Compared to the FDO by itself, this does a much better job at extracting the edges without including noise. Also, the extracted edges are thicker due to the convolution with the gaussian.</p>
 <p>We can accomplish the same thing with one convolution over the input image by instead using the same gaussian convolved with our finite difference filters as our DOG filter. This yields the same result. We verify by subtracting the result we produced with two steps and checking the maximum pixel value is equal to 0.</p>
 <p><img src="./plots/DOG_as_one_op.png" alt="DOG as One Operation" /></p>
 <hr />
