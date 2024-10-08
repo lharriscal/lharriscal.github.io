@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Project 2</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Project 2</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cs180-project-3-face-morphing">CS180 Project 3: Face Morphing:</a>
+<ul>
+<li><a href="#attribution">Attribution:</a></li>
+<li><a href="#part-1-defining-correspondences">Part 1: Defining Correspondences:</a></li>
+<li><a href="#part-2-computing-the-mid-way-face">Part 2: Computing the “Mid-way Face”:</a></li>
+<li><a href="#part-3-the-morph-sequence">Part 3: The Morph Sequence:</a></li>
+<li><a href="#part-4-the-mean-face-of-a-population">Part 4: The “Mean Face” of a Population:</a></li>
+<li><a href="#part-5-charicatures-extrapolating-from-the-mean">Part 5: Charicatures: Extrapolating from the Mean:</a></li>
+<li><a href="#adding-a-smile">Adding a smile???</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="cs180-project-3-face-morphing">CS180 Project 3: Face Morphing:</h1>
+<p>The goal of this project is to write and apply code to morph between faces. The general approach we take is to define corresponding keypoints between the two or more faces we intend to warp between, and form a triangular mesh from those keypoints. We then deform the mesh from each face to match the other and interpolate between the shapes of each face while crossfading the pixels.</p>
+<hr />
+<h2 id="attribution">Attribution:</h2>
+<p>Throughout the project I use a photo of Leonardo DiCaprio and a photo of Christian Bale from Wikimedia commons licensed under Creative Commons. Here are the required attributions:</p>
+<p><a href="https://commons.wikimedia.org/wiki/File:Christian_Bale_Quel_treno_per_Yuma_Premiere_Los_Angeles_2007_1.jpg">Andrea Cangioli</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>, via Wikimedia Commons</p>
+<p><a href="https://commons.wikimedia.org/wiki/File:Leonardo_DiCaprio_cropped_and_rotated_(cropped).jpg">Presidencia de la República Mexicana</a>, <a href="https://creativecommons.org/licenses/by/2.0">CC BY 2.0</a>, via Wikimedia Commons</p>
+<h2 id="part-1-defining-correspondences">Part 1: Defining Correspondences:</h2>
+<p>To implement face morphing, we must start by implementing a tool for defining corresponding point pairs between images. We can do this using matplotlib’s ginput. We then use Delauney triangulation with opencv to form the grid. To save time manually labeling points, we can save the points using <code>np.save</code> to use again after we label them. he process is pictured below:</p>
+<p><img src="./plots/pts_select.png" alt="Points selection" /> <img src="./plots/pts_select_correspondance.png" alt="Points selection against image 1" /> <img src="./plots/bale_tris.png" alt="Resulting grid bale" /> <img src="./plots/leo_tris.png" alt="Resulting grid leo" /></p>
+<h2 id="part-2-computing-the-mid-way-face">Part 2: Computing the “Mid-way Face”:</h2>
+<p>We continue to progress towards our goal of implementing warp sequences by computing the midway face between our images. We do this by warping each face’s triangular grid into the mean of the two grid shapes and then averaging the values at each pixel.</p>
+<p>To warp the triangle grids, for each individual triangle, we use an affine warp to warp to the target shape, and we mask the resulting triangle to the target final triangle shape. We then combine all the triangles by taking the pixelwise max of all masked warped triangles.</p>
+<p>We can compute an affine warp matrix by using least squares to solve for a linear transformation we can make on the input triangle points to get the output triangle points. To get the inverse warp matrix, we swap imputs and outputs. This therefore lets us know what pixel indices on the input correspond to each index on the output.</p>
+<p>We demonstrate the midway face warp for the same photos of Leonardo Dicaprio and Christian Bale below:</p>
+<p><img src="./plots/midway.png" alt="Midway Warp" /></p>
+<h2 id="part-3-the-morph-sequence">Part 3: The Morph Sequence:</h2>
+<p>Following a similar procedure as the midway face, we can produce an animated warp between the two faces. We implement a new function, morph, that, instead of warping each triangle mesh to the midpoint, warps each triangle mesh to a weighted average of the two meshes and computes a pixelwise weighted average of the two warped photos. This way we can control how far along in a morph we create an image. Therefore, to create the final morph sequence, all we have to do is interpolate between the photos in shape while at the same time cross fading between the photos. We get the following result:</p>
+<p><img src="./plots/morph_seq.gif" alt="Morph Sequence" /></p>
+<h2 id="part-4-the-mean-face-of-a-population">Part 4: The “Mean Face” of a Population:</h2>
+<p>Using similar techniques, we can compute the “mean face” of a population. To do this, we can do the following:</p>
+<ol type="1">
+<li>Compute the average position of corresponding keypoints for each image.</li>
+<li>Morph each image to the average keypoint locations.</li>
+<li>Take the pixelwise mean of each output image</li>
+</ol>
+<p>Applying to the <a href="https://fei.edu.br/~cet/facedatabase.html">FEI face database</a> on non-smiling images. Step two gives us the following results:</p>
+<p><img src="./plots/warp_to_mean_1.png" alt="Warp to Mean 1" /> <img src="./plots/warp_to_mean_2.png" alt="Warp to Mean 2" /> <img src="./plots/warp_to_mean_3.png" alt="Warp to Mean 3" /> <img src="./plots/warp_to_mean_4.png" alt="Warp to Mean 4" /> <img src="./plots/warp_to_mean_5.png" alt="Warp to Mean 5" /> <img src="./plots/warp_to_mean_6.png" alt="Warp to Mean 6" /></p>
+<p>We get this final mean image:</p>
+<p><img src="./plots/mean_face.png" alt="Mean Face" /></p>
+<p>I can similarly warp my own face into the mean geometry:</p>
+<p><img src="./plots/me.jpg" alt="Me" /> <img src="./plots/me_to_mean.png" alt="Me as Mean" /></p>
+<p>The reverse is also possible where the average face is warped to my face geometry:</p>
+<p><img src="./plots/mean_face.png" alt="Mean Face" /> <img src="./plots/mean_to_me.png" alt="Mean as Me" /></p>
+<h2 id="part-5-charicatures-extrapolating-from-the-mean">Part 5: Charicatures: Extrapolating from the Mean:</h2>
+<p>We have already shown that we can interpolate between my face geometry and the population mean geometry. But it is also possible to extrapolate. If we interpolate by computing <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha%20%28%5Ctext%7Bmean%20geometry%7D%29%20%2B%20%281-%5Calpha%29%20%2A%20%28%5Ctext%7Bmy%20geometry%7D%29" alt="\alpha (\text{mean geometry}) + (1-\alpha) * (\text{my geometry})" title="\alpha (\text{mean geometry}) + (1-\alpha) * (\text{my geometry})" /> for some <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha" alt="\alpha" title="\alpha" /> between 0 and 1, we can extrapolate by performing the same operation for <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha%20%3C%200" alt="\alpha &lt; 0" title="\alpha &lt; 0" /> or <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha%20%3E%201" alt="\alpha &gt; 1" title="\alpha &gt; 1" />.</p>
+<p>We get the following results for <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha%20%3D%20-0.25" alt="\alpha = -0.25" title="\alpha = -0.25" />:</p>
+<p><img src="./plots/me.jpg" alt="Me" /> <img src="./plots/charicature025.png" alt="Charicature" /></p>
+<p>We get the following results for <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha%20%3D%20-0.5" alt="\alpha = -0.5" title="\alpha = -0.5" />:</p>
+<p><img src="./plots/me.jpg" alt="Me" /> <img src="./plots/charicature050.png" alt="Charicature" /></p>
+<p>Decreasing <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha" alt="\alpha" title="\alpha" /> below 0 progressively intensifies features that deviate from the mean, resulting in a charicature like image. This is because the equation we use makes the geometry move further from the mean in the direction that the face geometry already deviates from the mean geometry.</p>
+<p>At <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha%20%3D%20-0.25" alt="\alpha = -0.25" title="\alpha = -0.25" />, the face is narrowed, the forehead appears larger, and some features are sharpened. All these changes are amplified with <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha%3D-0.5" alt="\alpha=-0.5" title="\alpha=-0.5" />, but we also see some artifacting between the eyebrows. This suggests that there is a limit to how far we can extrapolate without breaking the structure of the image.</p>
+<h2 id="adding-a-smile">Adding a smile???</h2>
+<p>If we compute the average facial geometry of the set of images where people are smiling, we can apply this geometry to my face to change my expression to a smile.</p>
+<p>Just modifying the geometry, we get the following transformation:</p>
+<p><img src="./plots/me.jpg" alt="Me" /> <img src="./plots/me_smile_geom.png" alt="Me smile" /></p>
+<p>Taking this approach gives me a positive facial expression but the rest of my face is warped to the mean face, making it look very distorted.</p>
+<p>We can also warp the average face to my geometry and interpolate between the pixel values.</p>
+<p><img src="./plots/me.jpg" alt="Me" /> <img src="./plots/me_smile_app05.png" alt="Me smile" /> <img src="./plots/me_smile_app10.png" alt="Me smile" /></p>
+<p>When we use use the mean appearance of a smiling person to my geometry you can see teeth, but the expression is not perfectly a smile. Also it does not look like me anymore. The middle image looks like a grayer version of the original photo of me.</p>
+<p>Modifying the appearance and geometry, we get the following results:</p>
+<p><img src="./plots/me.jpg" alt="Me" /> <img src="./plots/me_smile_both.png" alt="Me smile" /></p>
+<p>This makes my lips wider, widens my face, turns the sides of my mouth up closer to a smile, but it is still far from perfect.</p>
+<p>I also attempted to manually define keypoints to tilt my mouth into a smile. My thought process here was that manually defining the points would let my face remain undistorted excluding the smile region.</p>
+<p><img src="./plots/me.jpg" alt="Me" /> <img src="./plots/me_smile_manual.png" alt="Me Smile Manual" /></p>
+<p>This result is the most desirable because it warps the mouth into a smile shape but does not distort the rest of the face much.</p>
+</body>
+</html>
+<style>img { max-width: 90%; height: auto; } }</style>
