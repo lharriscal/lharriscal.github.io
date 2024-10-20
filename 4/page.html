@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Project 3</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Project 3</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cs180-project-4-image-warping-and-mosaicing">CS180 Project 4: Image Warping and Mosaicing:</a>
+<ul>
+<li><a href="#part-1">Part 1:</a>
+<ul>
+<li><a href="#step-1-shoot-the-pictures">Step 1: Shoot the pictures:</a></li>
+<li><a href="#step-2-recover-homographies">Step 2: Recover homographies:</a></li>
+<li><a href="#step-3-image-warping">Step 3: Image Warping:</a></li>
+<li><a href="#step-4-rectification">Step 4: Rectification:</a></li>
+<li><a href="#step-5-image-mosaicing">Step 5: Image Mosaicing:</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="cs180-project-4-image-warping-and-mosaicing">CS180 Project 4: Image Warping and Mosaicing:</h1>
+<p>The goal of this project is to combine images into mosaics through perspective warping and matching keypoint locations.</p>
+<hr />
+<h2 id="part-1">Part 1:</h2>
+<p>In part 1, we capture a set of images and combine them into a mosaic by computing homographies with manually labeled keypoints.</p>
+<h3 id="step-1-shoot-the-pictures">Step 1: Shoot the pictures:</h3>
+<p>To create an image mosaic the first thing that we need is images. For a perspective warp to work properly and actually show what one image would look one the same perspective plane as the other, the images must all be taken with the same center of projection. Otherwise, the effects of parallax combined with the 3d geometry of the scene makes it so each image in the scene observes fundamentally different things.</p>
+<p>I went to Lawrence Hall of Science at night to capture the set of images I will be using for the mosaic. Here are the two images, I will use for the part 1 mosaic.</p>
+<p><img src="./plots/out_2_small.png" alt="im1" /> <img src="./plots/out_3_small.png" alt="im2" /></p>
+<h3 id="step-2-recover-homographies">Step 2: Recover homographies:</h3>
+<p>To perform a perspective warp, we must first extract the appropriate homography matrix. The homography matrix takes a set of points and transforms them to the locations of another set of points. It also satisfies the equation:</p>
+<p><br /><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%0As_i%20%5Cbegin%7Bbmatrix%7Dx_i%27%20%5C%5C%20y_i%27%20%5C%5C%201%20%5Cend%7Bbmatrix%7D%20%3D%20H%20%5Cbegin%7Bbmatrix%7Dx_i%20%5C%5C%20y_i%20%5C%5C%201%5Cend%7Bbmatrix%7D%0A" alt="
+s_i \begin{bmatrix}x_i&#39; \\ y_i&#39; \\ 1 \end{bmatrix} = H \begin{bmatrix}x_i \\ y_i \\ 1\end{bmatrix}
+" title="
+s_i \begin{bmatrix}x_i&#39; \\ y_i&#39; \\ 1 \end{bmatrix} = H \begin{bmatrix}x_i \\ y_i \\ 1\end{bmatrix}
+" /><br /></p>
+<p>Where <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s_i" alt="s_i" title="s_i" /> is a scaling factor for a corresponding point pair, <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%2C%20y_i%29" alt="(x_i, y_i)" title="(x_i, y_i)" /> and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%27%2C%20y_i%27%29" alt="(x_i&#39;, y_i&#39;)" title="(x_i&#39;, y_i&#39;)" /> are a corresponding point pair, and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20H" alt="H" title="H" /> is a matrix of the form:</p>
+<p><br /><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%0AH%20%3D%20%5Cbegin%7Bbmatrix%7D%20h_%7B11%7D%20%26%20h_%7B12%7D%20%26%20h_%7B13%7D%20%5C%5C%20h_%7B21%7D%20%26%20h_%7B22%7D%20%26%20h_%7B23%7D%20%5C%5C%20h_%7B31%7D%20%26%20h_%7B32%7D%20%26%201%5Cend%7Bbmatrix%7D%0A" alt="
+H = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; 1\end{bmatrix}
+" title="
+H = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; 1\end{bmatrix}
+" /><br /></p>
+<p>Given a set of corresponding points, we can form a system of linear equations, and solve for the 8 unknowns of the H matrix. We need at least 4 point pairs solve for H. To define the corresponding points, I wrote a script with ginput:</p>
+<p><img src="./plots/points_def.png" alt="im0" /> <img src="./plots/points_match.png" alt="im match" /></p>
+<h3 id="step-3-image-warping">Step 3: Image Warping:</h3>
+<p>Given a homography matrix we implement a function to warp an image. We can find what position on the output image a given point on the input image corresponds to be multiplying each point <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%2C%20y_i%2C%201%29" alt="(x_i, y_i, 1)" title="(x_i, y_i, 1)" /> by H to get output point <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28s_i%20%2A%20x_i%27%2C%20s_i%20%2A%20y_i%27%2C%20s_i%29" alt="(s_i * x_i&#39;, s_i * y_i&#39;, s_i)" title="(s_i * x_i&#39;, s_i * y_i&#39;, s_i)" /> and dividing by <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s_i" alt="s_i" title="s_i" />. We use <code>scipy.interpolate.griddata</code> to interpolate between known values.</p>
+<h3 id="step-4-rectification">Step 4: Rectification:</h3>
+<p>We can demonstrate our homography warping computations work we can “rectify” an image, that is take a rectangular object that is imaged off axis, and warp it to a rectangle. I do this by mapping a the corners to a new set of points formed from the row and column averages of each side of the original rectangle. The new points are created in a rectangle. I do so with an image of a book:</p>
+<p><img src="./plots/book.png" alt="book" /> <img src="./plots/rectify.png" alt="book rect" /></p>
+<p>As a note, the deviation from being rectangular in the top right corner comes from a physical bend in the book and not a flaw in the algorithm.</p>
+<h3 id="step-5-image-mosaicing">Step 5: Image Mosaicing:</h3>
+<p>If we define point correspondences between many taken from the same center of projection, and sequentially warp them to match, and blend the images together, we can form an image mosaic. The images are combined with a mask formed by applying a distance filter on the overlapping regions of the final warped images. This mask is applied using a 2 layer laplacian stack in order to create smoother blending. My final image mosaic is shown below:</p>
+<p><img width="500px" src="./plots/mosaic.png" alt="mosaic" /></p>
+</body>
+</html>
+<style>img { max-width: 90%; height: auto; } }</style>
