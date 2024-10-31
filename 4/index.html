@@ -6,12 +6,165 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Project 4</title>
   <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
 </head>
 <body>
@@ -20,52 +173,214 @@
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#cs180-project-4-image-warping-and-mosaicing">CS180 Project 4: Image Warping and Mosaicing:</a>
+<li><a href="#cs180-project-4-image-warping-and-mosaicing"
+id="toc-cs180-project-4-image-warping-and-mosaicing">CS180 Project 4:
+Image Warping and Mosaicing:</a>
 <ul>
-<li><a href="#part-1">Part 1:</a>
+<li><a href="#part-1" id="toc-part-1">Part 1:</a>
 <ul>
-<li><a href="#step-1-shoot-the-pictures">Step 1: Shoot the pictures:</a></li>
-<li><a href="#step-2-recover-homographies">Step 2: Recover homographies:</a></li>
-<li><a href="#step-3-image-warping">Step 3: Image Warping:</a></li>
-<li><a href="#step-4-rectification">Step 4: Rectification:</a></li>
-<li><a href="#step-5-image-mosaicing">Step 5: Image Mosaicing:</a></li>
+<li><a href="#step-1-shoot-the-pictures"
+id="toc-step-1-shoot-the-pictures">Step 1: Shoot the pictures:</a></li>
+<li><a href="#step-2-recover-homographies"
+id="toc-step-2-recover-homographies">Step 2: Recover
+homographies:</a></li>
+<li><a href="#step-3-image-warping" id="toc-step-3-image-warping">Step
+3: Image Warping:</a></li>
+<li><a href="#step-4-rectification" id="toc-step-4-rectification">Step
+4: Rectification:</a></li>
+<li><a href="#step-5-image-mosaicing"
+id="toc-step-5-image-mosaicing">Step 5: Image Mosaicing:</a></li>
 </ul></li>
+<li><a href="#part-2" id="toc-part-2">Part 2:</a>
+<ul>
+<li><a href="#step-1-harris-interest-point-detection"
+id="toc-step-1-harris-interest-point-detection">Step 1: Harris Interest
+Point Detection:</a></li>
+<li><a href="#step-2-adaptive-non-maximal-suppression"
+id="toc-step-2-adaptive-non-maximal-suppression">Step 2: Adaptive
+Non-Maximal Suppression:</a></li>
+<li><a href="#step-3-feature-descriptors-and-matching"
+id="toc-step-3-feature-descriptors-and-matching">Step 3: Feature
+Descriptors and Matching:</a></li>
+<li><a href="#step-4-ransac-homographies-and-resulting-mosaics"
+id="toc-step-4-ransac-homographies-and-resulting-mosaics">Step 4: RANSAC
+Homographies and Resulting Mosaics:</a></li>
+</ul></li>
+<li><a href="#what-have-i-learned" id="toc-what-have-i-learned">What
+Have I Learned:</a></li>
 </ul></li>
 </ul>
 </nav>
-<h1 id="cs180-project-4-image-warping-and-mosaicing">CS180 Project 4: Image Warping and Mosaicing:</h1>
-<p>The goal of this project is to combine images into mosaics through perspective warping and matching keypoint locations.</p>
+<h1 id="cs180-project-4-image-warping-and-mosaicing">CS180 Project 4:
+Image Warping and Mosaicing:</h1>
+<p>The goal of this project is to combine images into mosaics through
+perspective warping and matching keypoint locations.</p>
 <hr />
 <h2 id="part-1">Part 1:</h2>
-<p>In part 1, we capture a set of images and combine them into a mosaic by computing homographies with manually labeled keypoints.</p>
+<p>In part 1, we capture a set of images and combine them into a mosaic
+by computing homographies with manually labeled keypoints.</p>
 <h3 id="step-1-shoot-the-pictures">Step 1: Shoot the pictures:</h3>
-<p>To create an image mosaic the first thing that we need is images. For a perspective warp to work properly and actually show what one image would look one the same perspective plane as the other, the images must all be taken with the same center of projection. Otherwise, the effects of parallax combined with the 3d geometry of the scene makes it so each image in the scene observes fundamentally different things.</p>
-<p>I went to Lawrence Hall of Science at night to capture the set of images I will be using for the mosaic. Here are the two images, I will use for the part 1 mosaic.</p>
-<p><img src="./plots/out_2_small.png" alt="im1" /> <img src="./plots/out_3_small.png" alt="im2" /></p>
+<p>To create an image mosaic the first thing that we need is images. For
+a perspective warp to work properly and actually show what one image
+would look one the same perspective plane as the other, the images must
+all be taken with the same center of projection. Otherwise, the effects
+of parallax combined with the 3d geometry of the scene makes it so each
+image in the scene observes fundamentally different things.</p>
+<p>I went to Lawrence Hall of Science at night to capture the set of
+images I will be using for the mosaic. Here are the two images, I will
+use for the part 1 mosaic.</p>
+<p><img src="./plots/out_2_small.png" alt="im1" /> <img
+src="./plots/out_3_small.png" alt="im2" /></p>
 <h3 id="step-2-recover-homographies">Step 2: Recover homographies:</h3>
-<p>To perform a perspective warp, we must first extract the appropriate homography matrix. The homography matrix takes a set of points and transforms them to the locations of another set of points. It also satisfies the equation:</p>
-<p><br /><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%0As_i%20%5Cbegin%7Bbmatrix%7Dx_i%27%20%5C%5C%20y_i%27%20%5C%5C%201%20%5Cend%7Bbmatrix%7D%20%3D%20H%20%5Cbegin%7Bbmatrix%7Dx_i%20%5C%5C%20y_i%20%5C%5C%201%5Cend%7Bbmatrix%7D%0A" alt="
-s_i \begin{bmatrix}x_i&#39; \\ y_i&#39; \\ 1 \end{bmatrix} = H \begin{bmatrix}x_i \\ y_i \\ 1\end{bmatrix}
-" title="
-s_i \begin{bmatrix}x_i&#39; \\ y_i&#39; \\ 1 \end{bmatrix} = H \begin{bmatrix}x_i \\ y_i \\ 1\end{bmatrix}
-" /><br /></p>
-<p>Where <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s_i" alt="s_i" title="s_i" /> is a scaling factor for a corresponding point pair, <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%2C%20y_i%29" alt="(x_i, y_i)" title="(x_i, y_i)" /> and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%27%2C%20y_i%27%29" alt="(x_i&#39;, y_i&#39;)" title="(x_i&#39;, y_i&#39;)" /> are a corresponding point pair, and <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20H" alt="H" title="H" /> is a matrix of the form:</p>
-<p><br /><img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%0AH%20%3D%20%5Cbegin%7Bbmatrix%7D%20h_%7B11%7D%20%26%20h_%7B12%7D%20%26%20h_%7B13%7D%20%5C%5C%20h_%7B21%7D%20%26%20h_%7B22%7D%20%26%20h_%7B23%7D%20%5C%5C%20h_%7B31%7D%20%26%20h_%7B32%7D%20%26%201%5Cend%7Bbmatrix%7D%0A" alt="
-H = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; 1\end{bmatrix}
-" title="
-H = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; 1\end{bmatrix}
-" /><br /></p>
-<p>Given a set of corresponding points, we can form a system of linear equations, and solve for the 8 unknowns of the H matrix. We need at least 4 point pairs solve for H. To define the corresponding points, I wrote a script with ginput:</p>
-<p><img src="./plots/points_def.png" alt="im0" /> <img src="./plots/points_match.png" alt="im match" /></p>
+<p>To perform a perspective warp, we must first extract the appropriate
+homography matrix. The homography matrix takes a set of points and
+transforms them to the locations of another set of points. It also
+satisfies the equation:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20s_i%20%5Cbegin%7Bbmatrix%7Dx_i%27%20%5C%5C%20y_i%27%20%5C%5C%201%20%5Cend%7Bbmatrix%7D%20%3D%20H%20%5Cbegin%7Bbmatrix%7Dx_i%20%5C%5C%20y_i%20%5C%5C%201%5Cend%7Bbmatrix%7D"
+alt="s_i \begin{bmatrix}x_i&#39; \\ y_i&#39; \\ 1 \end{bmatrix} = H \begin{bmatrix}x_i \\ y_i \\ 1\end{bmatrix}"
+title="s_i \begin{bmatrix}x_i&#39; \\ y_i&#39; \\ 1 \end{bmatrix} = H \begin{bmatrix}x_i \\ y_i \\ 1\end{bmatrix}"
+class="math display" /></p>
+<p>Where <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s_i" alt="s_i"
+title="s_i" class="math inline" /> is a scaling factor for a
+corresponding point pair, <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%2C%20y_i%29"
+alt="(x_i, y_i)" title="(x_i, y_i)" class="math inline" /> and <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%27%2C%20y_i%27%29"
+alt="(x_i&#39;, y_i&#39;)" title="(x_i&#39;, y_i&#39;)"
+class="math inline" /> are a corresponding point pair, and <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20H" alt="H"
+title="H" class="math inline" /> is a matrix of the form:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20H%20%3D%20%5Cbegin%7Bbmatrix%7D%20h_%7B11%7D%20%26%20h_%7B12%7D%20%26%20h_%7B13%7D%20%5C%5C%20h_%7B21%7D%20%26%20h_%7B22%7D%20%26%20h_%7B23%7D%20%5C%5C%20h_%7B31%7D%20%26%20h_%7B32%7D%20%26%201%5Cend%7Bbmatrix%7D"
+alt="H = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; 1\end{bmatrix}"
+title="H = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23} \\ h_{31} &amp; h_{32} &amp; 1\end{bmatrix}"
+class="math display" /></p>
+<p>Given a set of corresponding points, we can form a system of linear
+equations, and solve for the 8 unknowns of the H matrix. We need at
+least 4 point pairs solve for H. To define the corresponding points, I
+wrote a script with ginput:</p>
+<p><img src="./plots/points_def.png" alt="im0" /> <img
+src="./plots/points_match.png" alt="im match" /></p>
 <h3 id="step-3-image-warping">Step 3: Image Warping:</h3>
-<p>Given a homography matrix we implement a function to warp an image. We can find what position on the output image a given point on the input image corresponds to be multiplying each point <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%2C%20y_i%2C%201%29" alt="(x_i, y_i, 1)" title="(x_i, y_i, 1)" /> by H to get output point <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28s_i%20%2A%20x_i%27%2C%20s_i%20%2A%20y_i%27%2C%20s_i%29" alt="(s_i * x_i&#39;, s_i * y_i&#39;, s_i)" title="(s_i * x_i&#39;, s_i * y_i&#39;, s_i)" /> and dividing by <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s_i" alt="s_i" title="s_i" />. We use <code>scipy.interpolate.griddata</code> to interpolate between known values.</p>
+<p>Given a homography matrix we implement a function to warp an image.
+We can find what position on the output image a given point on the input
+image corresponds to be multiplying each point <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28x_i%2C%20y_i%2C%201%29"
+alt="(x_i, y_i, 1)" title="(x_i, y_i, 1)" class="math inline" /> by H to
+get output point <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%28s_i%20%2A%20x_i%27%2C%20s_i%20%2A%20y_i%27%2C%20s_i%29"
+alt="(s_i * x_i&#39;, s_i * y_i&#39;, s_i)"
+title="(s_i * x_i&#39;, s_i * y_i&#39;, s_i)" class="math inline" /> and
+dividing by <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s_i" alt="s_i"
+title="s_i" class="math inline" />. We use
+<code>scipy.interpolate.griddata</code> to interpolate between known
+values.</p>
 <h3 id="step-4-rectification">Step 4: Rectification:</h3>
-<p>We can demonstrate our homography warping computations work we can “rectify” an image, that is take a rectangular object that is imaged off axis, and warp it to a rectangle. I do this by mapping a the corners to a new set of points formed from the row and column averages of each side of the original rectangle. The new points are created in a rectangle. I do so with an image of a book:</p>
-<p><img src="./plots/book.png" alt="book" /> <img src="./plots/rectify.png" alt="book rect" /></p>
-<p>As a note, the deviation from being rectangular in the top right corner comes from a physical bend in the book and not a flaw in the algorithm.</p>
+<p>We can demonstrate our homography warping computations work we can
+“rectify” an image, that is take a rectangular object that is imaged off
+axis, and warp it to a rectangle. I do this by mapping a the corners to
+a new set of points formed from the row and column averages of each side
+of the original rectangle. The new points are created in a rectangle. I
+do so with an image of a book:</p>
+<p><img src="./plots/book.png" alt="book" /> <img
+src="./plots/rectify.png" alt="book rect" /></p>
+<p>As a note, the deviation from being rectangular in the top right
+corner comes from a physical bend in the book and not a flaw in the
+algorithm.</p>
 <h3 id="step-5-image-mosaicing">Step 5: Image Mosaicing:</h3>
-<p>If we define point correspondences between many taken from the same center of projection, and sequentially warp them to match, and blend the images together, we can form an image mosaic. The images are combined with a mask formed by applying a distance filter on the overlapping regions of the final warped images. This mask is applied using a 2 layer laplacian stack in order to create smoother blending. My final image mosaic is shown below:</p>
-<p><img width="500px" src="./plots/mosaic.png" alt="mosaic" /></p>
+<p>If we define point correspondences between many taken from the same
+center of projection, and sequentially warp them to match, and blend the
+images together, we can form an image mosaic. The images are combined
+with a mask formed by applying a distance filter on the overlapping
+regions of the final warped images. My final image mosaic is shown
+below:</p>
+<p><img src="./plots/mosaic.png" alt="mosaic" /></p>
+<h2 id="part-2">Part 2:</h2>
+<p>In part 2, we automate image mosaicing by finding matching features,
+and computing a homography through RANSAC.</p>
+<h3 id="step-1-harris-interest-point-detection">Step 1: Harris Interest
+Point Detection:</h3>
+<p>To find keypoints, we use the Harris Interest Point Detection
+algorithm. We plot the outputs of keypoint detection below:</p>
+<p><img src="./plots/corners_harris.png" alt="corners" /></p>
+<p>On the left is the resulting keypoints plotted on our input image.
+The right contains the Harris response at each pixel of our input
+image.</p>
+<h3 id="step-2-adaptive-non-maximal-suppression">Step 2: Adaptive
+Non-Maximal Suppression:</h3>
+<p>By itself, Harris corner detection outputs a very large number of
+points, where many are not particularly strong. Therefore, we would like
+to select a subset of strong points for matching. However, if we were to
+simply take the points with the highest Harris responses, we would
+extract very unevenly distributed keypoints. Since this would ultimately
+hurt the stability of perspective warps used in our final mosaicing, we
+must enforce some condition of even distribution.</p>
+<p>To do this, we implement Adaptive Non-Maximal Suppression (ANMS).
+ANMS enforces some level of homogeneity in distribution by only
+retaining the point of maximum Harris response in its neighborhood
+radius. In practice, we find such a radius that produces a desired
+number of extracted corners.</p>
+<p>We plot the result of ANMS below given desired number of corners.</p>
+<p><img src="./plots/ANMS_out.png" alt="ANMS" /></p>
+<h3 id="step-3-feature-descriptors-and-matching">Step 3: Feature
+Descriptors and Matching:</h3>
+<p>Now that we can find candidate key points through ANMS, we can find
+matching corners between images. To do this, we must first extract
+descriptors of our interest points. We form descriptors by sampling the
+40x40 window around each keypoint into 8x8 patches. These patches are
+then flattened into vectors and normalized such that each descriptor has
+mean 0 and standard deviation 1.</p>
+<p>Given these feature descriptors we can match by finding point pairs
+where the difference between the feature descriptors has the minimum l2
+norm. While this gives the best matching for each keypoint, not every
+keypoint necessarily exists in each image, and not every extracted
+matching is correct. We therefore reject matches through Lowe
+thresholding, that is we only accept matches where the distance between
+the descriptors for the best match divided by that of the second best
+match is below a certain threshold.</p>
+<p>This yields fairly good results:</p>
+<p><img src="./plots/matches.png" alt="matching" /></p>
+<p>The points that share color between the two images are considered a
+match.</p>
+<h3 id="step-4-ransac-homographies-and-resulting-mosaics">Step 4: RANSAC
+Homographies and Resulting Mosaics:</h3>
+<p>Given a set of keypoint pairs between images, we can compute a
+homography to join points together. To compute the homography we use
+four point RANSAC:</p>
+<ol type="1">
+<li>Select four random point pairs and compute homography matrix.</li>
+<li>Apply homography matrix to the rest of the pairs. Pairs with
+resulting distances below a certain threshold are considered
+inliers.</li>
+<li>Count the number of inliers, and keep track of the largest set of
+inliers.</li>
+<li>Repeat steps 1-3 for n iterations.</li>
+<li>Recompute homography matrix using the largest set of inlier
+pairs.</li>
+</ol>
+<p>By computing the final homography only considering the largest set of
+inliers, we build in resistance to the inclusion of any falsely
+identified matching keypoint pair.</p>
+<p>We can use the resulting homography matrix to join images in the same
+manner as in part 1. We produce the following mosaics from pairs of
+images:</p>
+<p><img src="./plots/mosaic_0.png" alt="mosaic 0" /></p>
+<p><img src="./plots/mosaic_1.png" alt="mosaic 1" /></p>
+<p><img src="./plots/mosaic_2.png" alt="mosaic 2" /></p>
+<h2 id="what-have-i-learned">What Have I Learned:</h2>
+<p>I learned how Lowe thresholding can be used to reject incorrect
+keypoint pairs. Directly thresholding the distance between descriptors
+does not work because the ideal threshold would be different for
+different images. However if you compare the best match with the second
+best match, you can derive a more resilient thresholding method. Lowe
+thresholding works by the assumption that, only for a real match, the
+best keypoint pair is significantly better than the second best.</p>
 </body>
 </html>
 <style>img { max-width: 90%; height: auto; } }</style>
