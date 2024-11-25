@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Project 5</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 52em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Project 5</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cs180-project-5-fun-with-diffusion-models"
+id="toc-cs180-project-5-fun-with-diffusion-models">CS180 Project 5: Fun
+With Diffusion Models:</a>
+<ul>
+<li><a href="#part-a-diffusion-models-from-scratch"
+id="toc-part-a-diffusion-models-from-scratch">Part A: Diffusion Models
+from Scratch!</a>
+<ul>
+<li><a href="#part-0-setup" id="toc-part-0-setup">Part 0: Setup</a></li>
+<li><a href="#part-1-diffusion-models"
+id="toc-part-1-diffusion-models">Part 1: Diffusion Models</a></li>
+</ul></li>
+<li><a href="#part-b-the-power-of-diffusion-models"
+id="toc-part-b-the-power-of-diffusion-models">Part B: The Power of
+Diffusion Models!</a>
+<ul>
+<li><a href="#part-1-training-a-single-step-denoising-unet"
+id="toc-part-1-training-a-single-step-denoising-unet">Part 1: Training a
+Single-Step Denoising UNet</a></li>
+<li><a href="#part-2-training-a-diffusion-model"
+id="toc-part-2-training-a-diffusion-model">Part 2 Training a Diffusion
+Model</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="cs180-project-5-fun-with-diffusion-models">CS180 Project 5: Fun
+With Diffusion Models:</h1>
+<p>This project explores diffusion models, their application, and their
+implementation.</p>
+<hr />
+<h2 id="part-a-diffusion-models-from-scratch">Part A: Diffusion Models
+from Scratch!</h2>
+<h3 id="part-0-setup">Part 0: Setup</h3>
+<p>For this part, we import the DeepFloyd diffusion model from Hugging
+Face. Since computing text embeddings required a very large encoder
+network and hardware available is limited, we will use precomputed
+embeddings for this project.</p>
+<p>We generate 2 images for each of our three prompts. We generate
+images for the same prompt with three different values for
+<code>num_inference_steps</code></p>
+<p><code>num_inference_steps=5</code></p>
+<p><img src="./plots/pt0_5.png" alt="pt0 1" /></p>
+<p><code>num_inference_steps=50</code></p>
+<p><img src="./plots/pt0_50.png" alt="pt0 20" /></p>
+<p>With 5 steps, the model correctly draws a snowy mountain village, and
+a man wearingf a hat, but both drawings lack detail. THey almost look
+like pointilism. The generated drawing of a rocket ship contains a sky
+you might see a rocket ship drawn onto, but there is no actual rocket
+ship.</p>
+<p>With 50 steps, all three prompts are correctly drawn and have much
+higher detail and quality than the images generated with 5 steps. The
+snowy mountain village looks like a snowy mountain village, but it does
+not look realistic as an oil painting–it looks a bit artificial. The man
+wearing the hat looks almost photorealistic, but also looks like a
+sharpening filter was applied. The rocket ship looks like a cartoon
+drawing of a rocket ship.</p>
+<p>I used random seed 180 throughout this project.</p>
+<h3 id="part-1-diffusion-models">Part 1: Diffusion Models</h3>
+<p>For some image where we have iteratively added noise over T
+timesteps, diffusion models work by predicting the noise added to this
+image given the timestep.</p>
+<h4 id="implementing-the-forward-process">1.1: Implementing the Forward
+Process</h4>
+<p>To begin our exploration of diffusion models, we first implement the
+forward process that takes an input image and applies noise over t
+timesteps.</p>
+<p>This operation is given by equation:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20x_t%20%3D%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_t%7Dx_0%20%2B%20%5Csqrt%7B1%20-%20%5Cbar%7B%5Calpha%7D_t%7D%5Cepsilon"
+alt="x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon"
+title="x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon"
+class="math display" /></p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cbar%7B%5Calpha_t%7D"
+alt="\bar{\alpha_t}" title="\bar{\alpha_t}" class="math inline" /> are
+the noise coefficients defined by the DeepFloyd developers, and <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cepsilon"
+alt="\epsilon" title="\epsilon" class="math inline" /> is sampled from a
+normal distribution with mean 0 and standard deviation 1.</p>
+<p>We therefore implement <code>forward(im, t)</code> that takes an
+image and applies noise given timestep t. Applying to a picture of the
+Campanile, we get:</p>
+<p><img src="./plots/p1_1_forward.png" alt="forward model" /></p>
+<h4 id="classical-denoising">1.2: Classical Denoising:</h4>
+<p>One method of denoising that existed before neural networks is
+gaussian blur filtering. The logic here is that adding noise mostly
+introduces high freqency components to the image, so taking a low pass
+filter of the image can remove some of that noise. The biggest problem
+with this, is that you also lose the high frequencies from the original
+image. Therefore, while in some cases noise can be removed to an extent,
+the image is greatly degraded as a result.</p>
+<p>We apply to our noisy images of the campanile with kernel size 5 for
+our filter:</p>
+<p><img src="./plots/p1_2_denoising.png"
+alt="classical denoising" /></p>
+<h4 id="one-step-denoising">1.3: One-Step Denoising:</h4>
+<p>The first stage of the model is a denoiser. It outputs an estimate of
+noise given an image and timestep. Solving the forward model for the
+denoised image, we can apply this noise estimate to denoise our images
+of the campanile in one step:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20x_0%20%3D%20%5Cfrac%7Bx_t%20-%20%5Csqrt%7B1%20-%20%5Cbar%7B%5Calpha%7D_t%7D%5Cepsilon%7D%7B%5Csqrt%7B%5Cbar%7B%5Calpha%7D_t%7D%7D"
+alt="x_0 = \frac{x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon}{\sqrt{\bar{\alpha}_t}}"
+title="x_0 = \frac{x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon}{\sqrt{\bar{\alpha}_t}}"
+class="math display" /></p>
+<p>Doing so, we get the following results:</p>
+<p><img src="./plots/p1_3_denoising.png" alt="one step denoise" /></p>
+<p>These results are much cleaner than the classical denoising results,
+but the final images still lack definition.</p>
+<h4 id="iterative-denoising">1.4 Iterative Denoising:</h4>
+<p>By removing noise partially by time step instead of all at once, we
+can acheive better performance. Instead of just estimating the original
+image (timestep 0), we estimate we estimate the image at timestep t’
+given original timestep t. We compute each new estimate according to the
+following equation:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20x_%7Bt%27%7D%20%3D%20%5Cfrac%7B%5Csqrt%7B%5Cbar%7B%5Calpha%7D_%7Bt%27%7D%7D%5Cbeta_t%7D%7B1%20-%20%5Cbar%7B%5Calpha%7D_t%7D%20x_0%20%2B%20%5Cfrac%7B%5Csqrt%7B%5Calpha_t%7D%281-%5Cbar%7B%5Calpha%7D_%7Bt%27%7D%29%7D%7B1-%5Cbar%7B%5Calpha%7D_t%7Dx_t%20%2B%20v_%5Csigma"
+alt="x_{t&#39;} = \frac{\sqrt{\bar{\alpha}_{t&#39;}}\beta_t}{1 - \bar{\alpha}_t} x_0 + \frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t&#39;})}{1-\bar{\alpha}_t}x_t + v_\sigma"
+title="x_{t&#39;} = \frac{\sqrt{\bar{\alpha}_{t&#39;}}\beta_t}{1 - \bar{\alpha}_t} x_0 + \frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t&#39;})}{1-\bar{\alpha}_t}x_t + v_\sigma"
+class="math display" /></p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x_t" alt="x_t"
+title="x_t" class="math inline" /> is the image at timestep t. <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x_%7Bt%27%7D"
+alt="x_{t&#39;}" title="x_{t&#39;}" class="math inline" /> is the image
+at timestep <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20t%27"
+alt="t&#39;" title="t&#39;" class="math inline" /> which is less than t.
+<img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha_t%20%3D%20%5Cfrac%7B%5Cbar%7B%5Calpha%7D_t%7D%7B%5Cbar%7B%5Calpha%7D_%7Bt%27%7D%7D"
+alt="\alpha_t = \frac{\bar{\alpha}_t}{\bar{\alpha}_{t&#39;}}"
+title="\alpha_t = \frac{\bar{\alpha}_t}{\bar{\alpha}_{t&#39;}}"
+class="math inline" />. <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cbeta_t%0A%3D%201-%5Calpha_t"
+alt="\beta_t
+= 1-\alpha_t" title="\beta_t
+= 1-\alpha_t" class="math inline" />. <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x_0" alt="x_0"
+title="x_0" class="math inline" /> is our current one step denoising
+estimate of the original image.</p>
+<p>In practive, we start with timestep t and each step we reduce t by 30
+until we reach 0. Through iterative denoising, we get the following
+results:</p>
+<p><img src="./plots/p1_4_denoising.png"
+alt="iterative denoising" /></p>
+<p>As we can see, iterative denoise provides by far the best quality
+result. While there was not enough data to accurately recreate the
+campanile, the iterative process created something photorealistic and
+plausible.</p>
+<h4 id="diffusion-model-sampling">1.5 Diffusion Model Sampling:</h4>
+<p>If we feed this denoising model a noisy image, it does a fairly good
+job at reconstructing a plausible image. However, as we start to add
+more noise, the model has to make up more and more of the information it
+is reconstructing. It therefore follows that if we apply to model to
+pure noise, it will just create images out of nothing.</p>
+<p>Doing this, we get the following results:</p>
+<p><img src="./plots/p1_5_diffusion_sampling.png"
+alt="diffusion sampling" /></p>
+<p>These results feel like they are photorealistic, but if you closely
+examine any specific part of the image, you realize the contexts do not
+make sense.</p>
+<h4 id="classifier-free-guidance-cfg">1.6 Classifier-Free Guidance
+(CFG)</h4>
+<p>To improve quality, we implement Classifier Free Guidance (CFG). At
+each step CFG computes two noise estimates, one conditioned on some
+prompt, and one unconditioned. The noise estimate we apply at each step
+comes from a linear combination of the two estimates. If <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cepsilon_c"
+alt="\epsilon_c" title="\epsilon_c" class="math inline" /> and <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cepsilon_u"
+alt="\epsilon_u" title="\epsilon_u" class="math inline" /> are the
+conditioned and unconditioned noise estimates respectively, the compound
+noise estimate is given by:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cepsilon%20%3D%20%5Cepsilon_u%20%2B%20%5Cgamma%28%5Cepsilon_c%20%2B%20%5Cepsilon_u%29"
+alt="\epsilon = \epsilon_u + \gamma(\epsilon_c + \epsilon_u)"
+title="\epsilon = \epsilon_u + \gamma(\epsilon_c + \epsilon_u)"
+class="math display" /></p>
+<p>For this project, we use <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cgamma%3D7"
+alt="\gamma=7" title="\gamma=7" class="math inline" /></p>
+<p>Sampling the diffusion model as in part 1.5, but now with CFG, we get
+the following images:</p>
+<p><img src="./plots/p1_6_diffusion_sampling.png"
+alt="diffusion sampling with CFG" /></p>
+<p>These results are now much more self consistent and
+photorealistic.</p>
+<h4 id="image-to-image-translation">1.7 Image to Image Translation:</h4>
+<p>Depending on how much noise we apply to a real image, the model will
+“hallucinate” a different amount of content to fill in the blanks. We
+can therefore create a sequence of images from high noise to minimal
+noise where each bears closer resemblence to the original image.</p>
+<p>We get the following sequences:</p>
+<p><img src="./plots/p1_7_i2i.png" alt="i2i" /></p>
+<p>For each sequence, we see progressively closer resemblance to the
+original image.</p>
+<h5 id="editing-hand-drawn-and-web-images">1.71 Editing Hand-Drawn and
+Web Images</h5>
+<p>We apply this same process to one image from the web, and two hand
+drawn images:</p>
+<p>Web:</p>
+<p><img src="./plots/p1_71_i2i_web.png" alt="i2i" /></p>
+<p>The last two objects are similar robots, and the third to last has a
+similar overall shape.</p>
+<p>Hand Drawn:</p>
+<p><img src="./plots/p1_71_i2i_hand1.png" alt="i2i" /></p>
+<p>The last image in the sequence makes the image of cake more hand like
+and the one before shows a realistic hand in a similar pose.</p>
+<p><img src="./plots/p1_71_i2i_hand2.png" alt="i2i" /></p>
+<p>The last image in the sequence is not much different from the
+original, but the one before shows a woman sitting on a table where the
+table legs form a similar shape to the rocket fins.</p>
+<h5 id="inpainting">1.72 Inpainting</h5>
+<p>We can use the same sort of behaviour to inpaint an image. We do this
+by replacing pixels in a mask we are trying to inpaint with random
+noise, then running a diffusion denoising loop. At every step, we
+enforce that pixels outside of the inpainting region are set to be the
+same as the original image with an appropriate amount of added noise for
+the timestep. Everything in the inpainting region is left alone.</p>
+<p>We apply to three images (The campanile and two others):</p>
+<p><img src="./plots/p1_72_inpaint.png" alt="inpainting" /></p>
+<p>The model adds a newe building to the base of the campanile. It adds
+flowers as a garnish to the coffee, and it adds a flower into the
+mug.</p>
+<h4 id="text-conditional-image-to-image-translation">1.73 Text
+Conditional Image-to-image Translation</h4>
+<p>We can also apply image to image translation with SDEdit as we have
+done before, but this time include text prompts to guide the
+content.</p>
+<p>We produce the following sequences:</p>
+<p><img src="./plots/p1_73_tcond_i2i.png"
+alt="text conditioned i2i" /></p>
+<p>The first sequence uses the prompt “a pencil,” the second uses “an
+oil painting of an old man,” and the last uses “an oil painting of a
+snowy mountain.” In all three we transition from an image of the prompt
+to the image we supplied.</p>
+<p>In the first sequence we go from a girl holding a pencil, to a
+pencil, to a pencil like tower, to the campanile. In the second, we go
+from oil paintings of old men, to oil paintings of old men on canvases
+resembling the coffee, to an image of coffee. In the last sequence, we
+produce three images of snowy mountain villages, then an image of a
+snowy mountain house in front of a background in the shape of a cup,
+then we transition to images of cups with snowy mountain features
+patterned on the sides.</p>
+<h4 id="visual-anagrams">1.8 Visual Anagrams</h4>
+<p>With the Visual Anagrams algorithm, we can use the UNet diffusion
+model to create images that look like like one prompt right side up and
+another prompt upside down. To do this, at each step we create two noise
+estimates: one for the first prompt and the right side image and the
+other for the second prompt and the flipped image. We create and apply
+them as follows:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cepsilon_1%20%3D%20%5Ctext%7BUNet%7D%28x_t%2C%20t%2C%20p_1%29"
+alt="\epsilon_1 = \text{UNet}(x_t, t, p_1)"
+title="\epsilon_1 = \text{UNet}(x_t, t, p_1)" class="math display" />
+<img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cepsilon_2%20%3D%20%5Ctext%7Bflip%7D%28%5Ctext%7BUNet%7D%28%5Ctext%7Bflip%7D%28x_t%29%2C%20t%2C%20p_2%29%29"
+alt="\epsilon_2 = \text{flip}(\text{UNet}(\text{flip}(x_t), t, p_2))"
+title="\epsilon_2 = \text{flip}(\text{UNet}(\text{flip}(x_t), t, p_2))"
+class="math display" /> <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cepsilon%20%3D%20%28%5Cepsilon_1%20%2B%20%5Cepsilon_2%29%20%2F%202"
+alt="\epsilon = (\epsilon_1 + \epsilon_2) / 2"
+title="\epsilon = (\epsilon_1 + \epsilon_2) / 2"
+class="math display" /></p>
+<p>UNet is the diffusion model, flip rotates the image 180 degrees, and
+<img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20p_1" alt="p_1"
+title="p_1" class="math inline" /> and <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20p_2" alt="p_2"
+title="p_2" class="math inline" /> are our prompt embeddings.</p>
+<p>We get the following results:</p>
+<p><img src="./plots/p1_8_va0.png" alt="visual anagrams 0" /></p>
+<p><img src="./plots/p1_8_va1.png" alt="visual anagrams 1" /></p>
+<p><img src="./plots/p1_8_va2.png" alt="visual anagrams 1" /></p>
+<h4 id="hybrid-images">1.9 Hybrid Images</h4>
+<p>In a somewhat similar process to the visual anagrams, we can create
+hybrid images that look like one thing up close and something else from
+far away. Like visual anagrams we create two noise estimates with two
+different prompt, but both noise estimates use the same image. We then
+combine the two noise estimates by highpassing one and lowpassing the
+other and then taking the sum. The algorithm works as follows:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cepsilon_1%20%3D%20%5Ctext%7BUNet%7D%28x_t%2C%20t%2C%20p_1%29"
+alt="\epsilon_1 = \text{UNet}(x_t, t, p_1)"
+title="\epsilon_1 = \text{UNet}(x_t, t, p_1)" class="math display" />
+<img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cepsilon_2%20%3D%20%5Ctext%7BUNet%7D%28x_t%2C%20t%2C%20p_2%29"
+alt="\epsilon_2 = \text{UNet}(x_t, t, p_2)"
+title="\epsilon_2 = \text{UNet}(x_t, t, p_2)" class="math display" />
+<img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Cepsilon%20%3D%20f_%5Ctext%7Blowpass%7D%28%5Cepsilon_1%29%20%2B%20f_%5Ctext%7Bhighpass%7D%28%5Cepsilon_2%29"
+alt="\epsilon = f_\text{lowpass}(\epsilon_1) + f_\text{highpass}(\epsilon_2)"
+title="\epsilon = f_\text{lowpass}(\epsilon_1) + f_\text{highpass}(\epsilon_2)"
+class="math display" /></p>
+<p><img src="./plots/p1_10_h0.png" alt="hybrid 0" /></p>
+<p>Up close this looks like “a lithograph of waterfalls” but far away
+looks like “a lithograph of a skull.”</p>
+<p><img src="./plots/p1_10_h1.png" alt="hybrid 1" /></p>
+<p>Up close this looks like “an oil painting of a snowy mountain
+village” but far away looks like “a lithograph of a skull.”</p>
+<p><img src="./plots/p1_10_h2.png" alt="hybrid 1" /></p>
+<p>Up close this looks like “a lithograph of waterfalls” but far away
+looks like “an oil painting of an old man.”</p>
+<h2 id="part-b-the-power-of-diffusion-models">Part B: The Power of
+Diffusion Models!</h2>
+<p>In this part we train our own diffusion model.</p>
+<h3 id="part-1-training-a-single-step-denoising-unet">Part 1: Training a
+Single-Step Denoising UNet</h3>
+<p>To start we train a UNet model to predict a clean image <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x" alt="x"
+title="x" class="math inline" /> given a noisy image <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20z" alt="z"
+title="z" class="math inline" />. We train directly on clean image noisy
+image pairs and use a mean squared error loss function.</p>
+<h4 id="part-1.1-implementing-the-unet">Part 1.1 Implementing the
+UNet</h4>
+<p>We implement the following architecture for our UNet (diagram from
+project description):</p>
+<p><img src="./plots/unconditional_arch.png" alt="UNet" /></p>
+<p>The model downsamples the original image 3 times, and then upsamples
+to the original dimensions. To compensate for the information that is
+lost by doing this, the downsampled output at each layer is concatenated
+with the upsampled output before further processing.</p>
+<h4 id="part-1.2-using-the-unet-to-train-a-denoiser">Part 1.2 Using the
+UNet to Train a Denoiser</h4>
+<p>As explained in the part 1 header, we aim train a UNet model to
+predict a clean image <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x" alt="x"
+title="x" class="math inline" /> given a noisy image <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20z" alt="z"
+title="z" class="math inline" />. We train directly on clean image noisy
+image pairs and use a mean squared error loss function. More
+specifically we define loss as:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20L%20%3D%20%5Cmathbb%20E_%7Bz%2Cx%7D%7C%7CD_%5Ctheta%28z%29%20-%20x%7C%7C%5E2"
+alt="L = \mathbb E_{z,x}||D_\theta(z) - x||^2"
+title="L = \mathbb E_{z,x}||D_\theta(z) - x||^2"
+class="math display" /></p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20D_%5Ctheta"
+alt="D_\theta" title="D_\theta" class="math inline" /> is our
+denoiser.</p>
+<p>Also to formalize a bit, we define a noise image <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20z" alt="z"
+title="z" class="math inline" /> given our clean image <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x" alt="x"
+title="x" class="math inline" /> as follows:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20z%20%3D%20x%20%2B%20%5Csigma%20%2A%20%5Cepsilon"
+alt="z = x + \sigma * \epsilon" title="z = x + \sigma * \epsilon"
+class="math display" /></p>
+<p>Where sigma is our noise standard deviation, and epsilon is noise
+sampled from a normal distribution with mean 0 and standard deviation
+1.</p>
+<p>We visualize the noising process as follows: <img
+src="./plots/Bp1_2_noiser.png" alt="noise" /></p>
+<h4 id="part-1.2.1-training">Part 1.2.1 Training</h4>
+<p>We use 5 epochs, batch size 256, learning rate 1e-4, hidden dimension
+size <code>D=128</code>, and noise standard deviation 0.5.</p>
+<p>We now train our model and produce the following training loss
+curve:</p>
+<p><img src="./plots/Bp1_21_loss.png" alt="loss" /></p>
+<p>We also produce the the following results after 1 and 5 epochs:</p>
+<p>After 1 epoch:</p>
+<p><img src="./plots/Bp1_21_results1.png" alt="results" /></p>
+<p>After 5 epochs:</p>
+<p><img src="./plots/Bp1_21_results2.png" alt="results" /></p>
+<p>We can see that by the fist epoch, the denoised images the model
+produces resemble the inputs, but have some artifacting and
+inaccuracies. By the fifth epoch, we get much better results without
+such artifacting present.</p>
+<h4 id="part-1.2.2-out-of-distribution-testing">Part 1.2.2
+Out-of-Distribution Testing</h4>
+<p>Our denoising model was trained for one specific noise level. We test
+our model on other noise levels to see how it performs:</p>
+<p><img src="./plots/Bp1_22_results.png" alt="results ood" /></p>
+<p>For noise levels under 0.6 the model performs relatively well, but by
+the time <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Csigma%20%3D%201"
+alt="\sigma = 1" title="\sigma = 1" class="math inline" />, the denoised
+digits produced are still recognizable but have much more artifacting
+and are much less plausibly part of the mnist dataset.</p>
+<h3 id="part-2-training-a-diffusion-model">Part 2 Training a Diffusion
+Model</h3>
+<p>We now implement and train a diffusion model. While in part 1, we
+trained a model to directly predict a denoised image given a noisy
+image, we now predict the noise added itself. We still use a mean square
+error loss function.</p>
+<p>Given our model <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cepsilon_%5Ctheta"
+alt="\epsilon_\theta" title="\epsilon_\theta" class="math inline" />,
+original image <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x" alt="x"
+title="x" class="math inline" />, noise added <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cepsilon"
+alt="\epsilon" title="\epsilon" class="math inline" /> (sampled from
+standard normal distribution), and noisy image <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20z" alt="z"
+title="z" class="math inline" /> such that <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20z%3Dx%2B%5Csigma%20%2A%20%5Cepsilon"
+alt="z=x+\sigma * \epsilon" title="z=x+\sigma * \epsilon"
+class="math inline" />, we define loss as follows:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20L%20%3D%20%5Cmathbb%20E_%7B%5Cepsilon%20%2C%20z%7D%20%7C%7C%5Cepsilon_%5Ctheta%28z%29%20-%20%5Cepsilon%7C%7C%5E2"
+alt="L = \mathbb E_{\epsilon , z} ||\epsilon_\theta(z) - \epsilon||^2"
+title="L = \mathbb E_{\epsilon , z} ||\epsilon_\theta(z) - \epsilon||^2"
+class="math display" /></p>
+<p>As in part A of the project, we consider noise as applied stepwise.
+We generate noisy image <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20x_t" alt="x_t"
+title="x_t" class="math inline" /> given timestep <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20t%20%5Cin%20%5C%7B0%2C1%2C...%2CT%5C%7D"
+alt="t \in \{0,1,...,T\}" title="t \in \{0,1,...,T\}"
+class="math inline" />:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20x_t%20%3D%20%5Csqrt%7B%5Cbar%7B%5Calpha%7D_t%7Dx_0%20%2B%20%5Csqrt%7B1%20-%20%5Cbar%7B%5Calpha%7D_t%7D%5Cepsilon"
+alt="x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon"
+title="x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon"
+class="math display" /></p>
+<p>For this part of the project we use <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20T%20%3D%20300"
+alt="T = 300" title="T = 300" class="math inline" /> and generate list
+${} with the following procedure:</p>
+<ul>
+<li><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cbeta"
+alt="\beta" title="\beta" class="math inline" /> is defined as a list
+with <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20T" alt="T"
+title="T" class="math inline" /> elements where <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cbeta_0%20%3D%2010%5E%7B-4%7D"
+alt="\beta_0 = 10^{-4}" title="\beta_0 = 10^{-4}" class="math inline" />
+and <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cbeta%20%3D%202%2A10%5E%7B-2%7D"
+alt="\beta = 2*10^{-2}" title="\beta = 2*10^{-2}" class="math inline" />
+and all other elements are linearly spaced.</li>
+<li><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha"
+alt="\alpha" title="\alpha" class="math inline" /> is a list such that
+<img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha_t%20%3D%201%20-%20%5Cbeta_t"
+alt="\alpha_t = 1 - \beta_t" title="\alpha_t = 1 - \beta_t"
+class="math inline" /></li>
+<li><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cbar%7B%5Calpha%7D"
+alt="\bar{\alpha}" title="\bar{\alpha}" class="math inline" /> is a list
+such that <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cbar%7B%5Calpha%7D_t%20%3D%20%5Cprod_%7Bs%3D1%7D%5Et%20%5Calpha_s"
+alt="\bar{\alpha}_t = \prod_{s=1}^t \alpha_s"
+title="\bar{\alpha}_t = \prod_{s=1}^t \alpha_s" class="math inline" />
+for <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s%20%5Cin%20%5C%7B1%2C...%2Ct%5C%7D"
+alt="s \in \{1,...,t\}" title="s \in \{1,...,t\}"
+class="math inline" /></li>
+</ul>
+<h4 id="part-2.1-adding-time-conditioning-to-unet">Part 2.1 Adding Time
+Conditioning to UNet</h4>
+<p>If we train the UNet to predict noise given a noisy image and
+timestep instead of just the noisy image, we can implement stepwise
+denoising as in part A of the project. To inject timestep t into the
+model, we simply process it with two fully connected blocks and add the
+outputs to the layer 1 unflatten output and the layer 2 upsampling
+output respectively. This diagram from the project description shows
+this graphically:</p>
+<p><img src="./plots/conditional_arch.png" alt="t cond" /></p>
+<h4 id="part-2.2-training-the-unet">Part 2.2 Training the UNet</h4>
+<p>We train the UNet Diffusion model in the same way we trained the UNet
+denoising model, but using our new definitions of loss, outputs, and
+inputs.</p>
+<p>We use batch size 128, hidden dimension size <code>D=64</code>, 20
+epochs, and learning rate 1e-3 with an exponential learning rate
+scheduler.</p>
+<p>We produce the following training loss plot:</p>
+<p><img src="./plots/Bp2_22_loss.png" alt="loss" /></p>
+<p>Sampling from the UNet with iterative denoising (with the same
+algorithm as in part A), we generate the following images:</p>
+<p>At epoch 5:</p>
+<p><img src="./plots/Bp2_23_results1.png" alt="results" /></p>
+<p>At epoch 20:</p>
+<p><img src="./plots/Bp2_23_results2.png" alt="results" /></p>
+<p>The results from epoch 5 resemble the dataset from afar, but upon
+closer inpection many sampled outputs are not recognizable as digits. By
+epoch 20, almost every output is recognizable.</p>
+<h4 id="part-2.4-adding-class-conditioning-to-unet">Part 2.4 Adding
+Class-Conditioning to UNet</h4>
+<p>Similarly to how we can supply timestep as an input to condition our
+UNet diffusion model, we can also supply the class of the noisy input
+while training. This way we can improve performance, and also denoise
+images given a class. This also lets us generate images of a certain
+class.</p>
+<p>To fit this into our model we add two more fully connected block
+layers to process one hot encoded vectors of the class of the input
+(0-9). To condition a layer with the output of these blocks, we simply
+multiply the layer by the output.</p>
+<p>The training follows similarly to the previous part, but we also
+supply the model with one hot encoded class as an input. To allow the
+model to function without class conditioning, we replace the class
+vector with zeros randomly with probability 0.1.</p>
+<p>We produce the following training loss plot:</p>
+<p><img src="./plots/Bp2_24_loss.png" alt="loss" /></p>
+<p>Sampling from the UNet with iterative denoising (with the same
+algorithm as in part A), we generate the following images. Each column
+is conditioned with a specific digit as the class.</p>
+<p>At epoch 5:</p>
+<p><img src="./plots/Bp2_25_results1.png" alt="results" /></p>
+<p>At epoch 20:</p>
+<p><img src="./plots/Bp2_25_results2.png" alt="results" /></p>
+<p>By epoch 5 we get fairly good results but a few of the 8s and one 9
+are questionably recognizable. By the 20th epoch, the results are
+clearer and of better quality.</p>
+</body>
+</html>
+<style>img { max-width: 90%; height: auto; } }</style>
