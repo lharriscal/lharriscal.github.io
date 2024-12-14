@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Final Project</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Final Project</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cs180-final-project" id="toc-cs180-final-project">CS180
+Final Project:</a>
+<ul>
+<li><a href="#subproject-1-lightfield-camera"
+id="toc-subproject-1-lightfield-camera">Subproject 1: Lightfield
+Camera</a>
+<ul>
+<li><a href="#part-1-depth-refocusing"
+id="toc-part-1-depth-refocusing">Part 1: Depth Refocusing</a></li>
+<li><a href="#part-2-aperture-adjustment"
+id="toc-part-2-aperture-adjustment">Part 2: Aperture
+Adjustment:</a></li>
+<li><a href="#part-3-summary" id="toc-part-3-summary">Part 3:
+Summary:</a></li>
+</ul></li>
+<li><a href="#subproject-2-hdr-images"
+id="toc-subproject-2-hdr-images">Subproject 2: HDR Images</a>
+<ul>
+<li><a href="#part-1-radiance-maps" id="toc-part-1-radiance-maps">Part
+1: Radiance Maps:</a></li>
+<li><a href="#part-2-tone-mapping" id="toc-part-2-tone-mapping">Part 2:
+Tone Mapping:</a></li>
+<li><a href="#cookies" id="toc-cookies">Cookies???</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="cs180-final-project">CS180 Final Project:</h1>
+<hr />
+<h2 id="subproject-1-lightfield-camera">Subproject 1: Lightfield
+Camera</h2>
+<p>In this subproject we investigate data postprocessing for lightfield
+camera. A lightfield camera differs from a normal camera in that, in
+addition to intensity at each pixel, it also captures direction.</p>
+<p>Each physical pixel consists of a grid of subpixels which each
+measure the light hitting its parent pixel in a specific direction. One
+can obtain an image equivalent to that of a traditional camera by
+summing all the subpixels for each pixel. In practice, one can construct
+a light field camera by introducing a microlens array in front of the
+image sensor. The microlens array focuses light from each direction onto
+the corresponding subpixel.</p>
+<p><img src="./plots/LFC.png" alt="Diagram" /></p>
+<p>A similar effect can be accomplished by taking multiple images over a
+regular grid (<a
+href="http://graphics.stanford.edu/papers/lfcamera/lfcamera-150dpi.pdf">explained
+in this paper</a> from Ng et al.). This method was used to produce the
+images for <a href="http://lightfield.stanford.edu/lfs.html">Stanford
+Light Field Archive</a>, which are used in this project.</p>
+<p>When both direction, position, and intensity are captured, we can do
+a variety of interesting post processing such as refocusing and aperture
+adjustment.</p>
+<h3 id="part-1-depth-refocusing">Part 1: Depth Refocusing</h3>
+<p>One interesting thing that light field measurement allow us to do is
+to perform refocusing after having already taken an image.</p>
+<p>To explain how we can implement refocusing we first need to undestand
+the form of the data in our dataset. Each image consists of many images
+taken over a regularly spaced grid orthogonal to the optical axis. Each
+image has everything in focus. This is important to note because, with
+everything in focus, pixel position gives us the angle of oncoming
+light. Our set of images thus ultimately gives us intensity and angle
+for a set of positions in our sampling grid. We have high angular
+resolution, and low positional resolution.</p>
+<p>By summing all images sampled over a grid, we can derive a composite
+image where the far away objects are in focus, but the nearby ones are
+out of focus. This is because, as you shift the position of a camera,
+the far away objects shift less than the nearby ones. Geometrically, one
+can imagine that rays from far away objects aproach parallel to
+eachother and the optical axis, allowing them to be in focus.</p>
+<p>The sum of all images over a grid for a few sets of images are shown
+below:</p>
+<p><img width="900px" src="plots/bracelet_gridsum.png" alt="naive sum 1" /></p>
+<p><img  width="900px" src="plots/chess_gridsum.png" alt="naive sum 2" /></p>
+<p><img width="900px" src="plots/flowers_gridsum.png" alt="naive sum 3" /></p>
+<p>If we perform a set of shifts to our set of images before summing
+them, we can move the focus plane from infinitely far out to an
+arbitrary plane. There is a linear relation between shift required for
+each image and the position of each image on the sampling grid. That is,
+images taken further from the grid center require more of a shift to
+correct focus.</p>
+<p>We therefore implement refocusing by introducing a parameter <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha"
+alt="\alpha" title="\alpha" class="math inline" /> and applying a linear
+shift on each image equal to the product of <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Calpha"
+alt="\alpha" title="\alpha" class="math inline" /> and sampling
+position. The set of shifted images is then summed.</p>
+<p>We show the results of shifting the focus plane:</p>
+<p><img src="plots/refocus1.png" alt="refocus 1" /></p><p><img width="900px"
+src="plots/bracelet_refocus.gif" alt="refocus 1" /></p>
+<p><img src="plots/refocus2.png" alt="refocus 2" /> </p><p><img width="900px"
+src="plots/chess_refocus.gif" alt="refocus 2" /></p>
+<p><img src="plots/refocus3.png" alt="refocus 3" /> </p><p><img width="900px"
+src="plots/flowers_refocus.gif" alt="refocus 3" /></p>
+<h3 id="part-2-aperture-adjustment">Part 2: Aperture Adjustment:</h3>
+<p>By performing refocusing using only a subset of images sampled from
+the grid orthogonal to the optical axis, we can simulate a smaller
+aperture and thus achieve a greater depth of field.</p>
+<p>To see why this works, we can imagine the sampling grid as the plane
+of our aperture. When we consider all images, we are considering all
+rays of light bounded by the sampling grid. When we consider only the
+images near the center, we only consider rays that are near the center
+of the sampling grid, which is equivalent to having a smaller
+aperture.</p>
+<p>Sweeping synthetic aperture size we get the following results:</p>
+<p><img src="plots/aperture1.png" alt="synthetic aperture 1" /></p><p> <img width="900px"
+src="plots/bracelet_aperture.gif" alt="synthetic aperture 1" /></p>
+<p><img src="plots/aperture2.png" alt="synthetic aperture 2" /></p><p> <img width="900px"
+src="plots/chess_aperture.gif" alt="synthetic aperture 2" /></p>
+<p><img src="plots/aperture3.png" alt="synthetic aperture 3" /> </p><p><img width="900px"
+src="plots/flowers_aperture.gif" alt="synthetic aperture 3" /></p>
+<h3 id="part-3-summary">Part 3: Summary:</h3>
+<p>Light fields and light field cameras are a subject that we explored
+in multiple lectures and readings in Dr. Laura Waller’s class in
+Computational Imaging this semester, so it was a topic I was already
+familiar with. However, through this project, I learned about how light
+field data cam be practically captured without a light field specific
+camera just by taking images on a grid. I also gained a sense of how to
+work with lightfield data from such gridwise data. Ultimately, I found
+the hands on experience and the opportunity to think about light fields
+from a different angle to be very useful.</p>
+<h2 id="subproject-2-hdr-images">Subproject 2: HDR Images</h2>
+<p>In the real world light occupies a large range of intensities,
+oftentimes even in the same physical location. For this reason, humans
+have evolved to be able to perceive a large dynamic range of light with
+their eyes. Oftentimes the dynamic range present in the physical world
+is a contibuting factor to its beauty. With photography we often want to
+capture the beauty of the real world or even just some representation of
+truth. However, modern cameras can only capture a narrow range of
+dynamic range. When a scene has both bright and low areas, you
+ultimately lose detail in either the bright or dim sections. However, by
+capturing a set of short and long exposures, we can combine the results
+to capture the full dynamic range and beauty of the real world.</p>
+<p>For this project we therefore investigate how we can create such
+composite images.</p>
+<h3 id="part-1-radiance-maps">Part 1: Radiance Maps:</h3>
+<p>When a camera captures an image, it maps radiance and exposure time
+to a pixel value through the function <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20Z_%7Bij%7D%20%3D%20f%28E_i%20%2A%20t_j%29"
+alt="Z_{ij} = f(E_i * t_j)" title="Z_{ij} = f(E_i * t_j)"
+class="math inline" /> where <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20Z_%7Bij%7D"
+alt="Z_{ij}" title="Z_{ij}" class="math inline" /> is observed pixel
+value at pixel i and image j, <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20E_i" alt="E_i"
+title="E_i" class="math inline" /> is radiance at pixel i, and <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20t_j" alt="t_j"
+title="t_j" class="math inline" /> is exposure time for image j. To
+solve for radiance, we solve for the log response function <img
+style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20g%28Z_%7Bij%7D%29%20%3D%20%5Ctext%7Bln%7D%28E_i%29%20%2B%20%5Ctext%7Bln%7D%28t_j%29"
+alt="g(Z_{ij}) = \text{ln}(E_i) + \text{ln}(t_j)"
+title="g(Z_{ij}) = \text{ln}(E_i) + \text{ln}(t_j)"
+class="math inline" />. Solving for g is easier because it is the sum of
+log radiance and log exposure time instead of being a product, allowing
+us to find g by solving a system of linear equations.</p>
+<p>To find g, we apply least squares to solve the following
+equation:</p>
+<p><img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Cdisplaystyle%20%5Ctext%7Bln%7D%28E_i%29%20%3D%20%5Cfrac%7B%5Csum%20w%28Z_%7Bij%7D%29%28g%28Z_%7Bij%7D%29%20-%20%5Ctext%7Bln%7D%28t_j%29%29%7D%7B%5Csum%20w%28Z_%7Bij%7D%29%7D"
+alt="\text{ln}(E_i) = \frac{\sum w(Z_{ij})(g(Z_{ij}) - \text{ln}(t_j))}{\sum w(Z_{ij})}"
+title="\text{ln}(E_i) = \frac{\sum w(Z_{ij})(g(Z_{ij}) - \text{ln}(t_j))}{\sum w(Z_{ij})}"
+class="math display" /></p>
+<p>w is the weighting function, which takes the form of a triangle with
+the peak at the average between min and max pixel values. We include w
+because our measurements are more trustworthy for pixel values closer to
+the middle of our range.</p>
+<p>We also simultaneously minimize the second derivative of g to enforce
+smoothness. Since g is discrete, we can approximate the second
+derivative as <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20g%28x-1%29%20%2B%20g%28x%2B1%29%20-%202g%28x%29"
+alt="g(x-1) + g(x+1) - 2g(x)" title="g(x-1) + g(x+1) - 2g(x)"
+class="math inline" />.</p>
+<p>We derive the following results on data from the provided
+dataset:</p>
+<p>Radiance plot of a bonsai tree:</p>
+<p><img src="plots/radiance1.png" alt="radiance 1" /></p>
+<p>Corresponsing response curves:</p>
+<p><img src="plots/response1.png" alt="response 1" /></p>
+<p>Radiance plot of house:</p>
+<p><img src="plots/radiance2.png" alt="radiance 2" /></p>
+<p>Corresponsing response curves:</p>
+<p><img src="plots/response2.png" alt="response 2" /></p>
+<h3 id="part-2-tone-mapping">Part 2: Tone Mapping:</h3>
+<p>Having a radiance map is only the first step in producing an HDR
+image. While we now have a relatively accurate representation of
+radiance, we need to map these values back onto the range between 0 and
+255 in order to display them. We cannot use a direct linear mapping
+because we would lose detail. We therefore use the following algorithm
+based on <a
+href="http://people.csail.mit.edu/fredo/PUBLI/Siggraph2002/DurandBilateral.pdf">Durand
+2002</a>:</p>
+<ol type="1">
+<li>Use linear radiance with color channels as input</li>
+<li>Compute intensity I as pixelwise mean of color channels.</li>
+<li>Compute chrominance as linear radiance / I.</li>
+<li>Compute log intensity <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20L%20%3D%20%5Ctext%7Blog2%7D%28I%29"
+alt="L = \text{log2}(I)" title="L = \text{log2}(I)"
+class="math inline" /></li>
+<li>Apply bilateral filter <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20B%20%3D%20%5Ctext%7Bbilateral%7D%28L%29"
+alt="B = \text{bilateral}(L)" title="B = \text{bilateral}(L)"
+class="math inline" /></li>
+<li>Compute detail layer as <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20D%20%3D%20L%20-%20B"
+alt="D = L - B" title="D = L - B" class="math inline" /></li>
+<li>Apply offset and scaling <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20B%27%20%3D%20%28B-o%29%20%2A%20s"
+alt="B&#39; = (B-o) * s" title="B&#39; = (B-o) * s"
+class="math inline" /> where <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20o%3D%5Ctext%7Bmax%7D%28B%29"
+alt="o=\text{max}(B)" title="o=\text{max}(B)" class="math inline" /> and
+<img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20s%20%3D%0A%28%5Ctext%7Bdesired%20dynamic%20range%7D%29%2F%28%5Ctext%7Bmax%7D%28B%29%20-%20%5Ctext%7Bmin%7D%28B%29%29"
+alt="s =
+(\text{desired dynamic range})/(\text{max}(B) - \text{min}(B))"
+title="s =
+(\text{desired dynamic range})/(\text{max}(B) - \text{min}(B))"
+class="math inline" /></li>
+<li>Find output log intensity <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20O%20%3D%202%5E%7BB%27%20%2B%20D%7D"
+alt="O = 2^{B&#39; + D}" title="O = 2^{B&#39; + D}"
+class="math inline" /></li>
+<li>Apply color by multiplying O by chrominance</li>
+<li>Raise result to the power of <img style="vertical-align:middle"
+src="https://latex.codecogs.com/png.latex?%5Ctextstyle%20%5Cgamma"
+alt="\gamma" title="\gamma" class="math inline" /> to apply gamma
+compression. We use 0.5.</li>
+</ol>
+<p>The bilateral filter applies blur while retaining edges. This allows
+us to compute offset and scaling without considering detail before
+reintroducing the detail we lost.</p>
+<p>This technique yields the following images:</p>
+<p><img src="plots/tone1.png" alt="tone 1" /></p>
+<p><img src="plots/tone2.png" alt="tone 2" /></p>
+<p>It is also possible through global strategies such as taking the
+square root or log of intensity. Below, we compare an image from the
+dataset to our composite hdr image with complex and simple tone
+mapping:</p>
+<p><img src="plots/bonsai_compare.png" alt="tone compare" /> <img
+src="plots/house_compare.png" alt="tone compare" /></p>
+<p>We can see that all HDR images allow us to see a greater dynamic
+range than the any one of the original images, and the more complex tone
+mapping strategy produces the best appearing results. While the other
+mappings look dark in areas or unnatural, the local method of tone
+mapping described above creates a natural, well balanced look.</p>
+<h3 id="cookies">Cookies???</h3>
+<p>Finally, I applied the same pipeline to images that I took. I used an
+iPhone app with an adjustable shutter, and fixed the phone in place.
+Here are the results:</p>
+<p><img src="plots/radiance_mine1.png" alt="radiance my photo 1" /></p>
+<p><img src="plots/response_mine1.png" alt="radiance my photo 1" /></p>
+<p><img src="plots/tone_mine1.png" alt="tone my photo 1" /></p>
+<p>This result looks natural, while capturing detail in the dark and
+light region of the image.</p>
+<p><img src="plots/radiance_mine2.png" alt="radiance my photo 2" /></p>
+<p><img src="plots/response_mine2.png" alt="radiance my photo 2" /></p>
+<p><img src="plots/tone_mine2.png" alt="tone my photo 2" /></p>
+<p>This result also looks natural and captures detail in all regions,
+but there is some speckling. One main difference in how this image was
+produced was that my “tripod” was less secure, and I only include four
+images over a very large dynamic range. I would expect that this problem
+could be alleviated by fixing these two issues.</p>
+<p>I include comparisons to other tone mapping methods below:</p>
+<p><img src="plots/mine1_compare.png" alt="compare 1" /> <img
+src="plots/mine2_compare.png" alt="compare 1" /></p>
+<p>Like in the other section, the local tone mapping performs the
+best.</p>
+<p>Also, to explore tone mapping a bit further, I plotted the high
+frequency and low frequency components separated when doing tone
+mapping:</p>
+<p><img src="plots/mine1_lf.png" alt="hf" /> <img
+src="plots/mine1_hf.png" alt="hf" /></p>
+<p>The bilateral filter isolates the low frequency components whil
+maintaining the edges. This also has the effect of not attenuating the
+bright regions near edges with dark regions which is important when
+computing tone mapping. If we instead used a gaussian filter, the some
+bright areas may not correctly fall in the target range in the output
+image.</p>
+</body>
+</html>
+<style>img { max-width: 80%; height: auto; } }</style>
